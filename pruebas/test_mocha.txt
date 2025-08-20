@@ -1,0 +1,38 @@
+// todo.mocha.test.js
+import { expect } from 'chai';
+import { TodoList } from './todo.js';
+
+describe('TodoList', () => {
+  let list;
+
+  beforeEach(() => {
+    list = new TodoList();
+  });
+
+  it('should add a new task', () => {
+    const todo = list.add('Learn testing');
+    expect(todo).to.deep.equal({ task: 'Learn testing', done: false });
+    expect(list.getAll()).to.have.lengthOf(1);
+  });
+
+  it('should mark a task as complete', () => {
+    list.add('Task 1');
+    const updated = list.complete(0);
+    expect(updated.done).to.be.true;
+  });
+
+  it('should remove a task', () => {
+    list.add('Task 1');
+    const removed = list.remove(0);
+    expect(removed.task).to.equal('Task 1');
+    expect(list.getAll()).to.have.lengthOf(0);
+  });
+
+  it('should throw if task is empty', () => {
+    expect(() => list.add('')).to.throw('Task must be a non-empty string');
+  });
+
+  it('should throw if index is invalid', () => {
+    expect(() => list.complete(5)).to.throw('Invalid index');
+  });
+});
